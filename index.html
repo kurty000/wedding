@@ -509,15 +509,83 @@
       r.readAsDataURL(blob);
     });
   }
+  var UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbwTRprbh_smqovnBd648Cp6KgEsUYv6O0dZmS8CZaHMrv8b11fWTh2Qj55dC-IfTgebSA/exec';
+
+  function fileStamp(ms) {
+    var d = new Date(ms);
+    function p(n, w) {
+      n = String(n);
+      while (n.length < (w || 2)) n = '0' + n;
+      return n;
+    }
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' '
+      + p(d.getHours()) + '-' + p(d.getMinutes()) + '-' + p(d.getSeconds()) + '-' + p(d.getMilliseconds(), 3);
+  }
+  function isValidationError(message) {
+    var msg = String(message || '').toLowerCase();
+    if (msg.indexOf('empty') !== -1) return true;
+    if (msg.indexOf('larger than 5') !== -1 || msg.indexOf('over 5') !== -1 || msg.indexOf('5 mb') !== -1) return true;
+    if (msg.indexOf('must be an image') !== -1 || msg.indexOf('not an image') !== -1) return true;
+    return false;
+  }
+  function parseUploadBody(text) {
+    try { return JSON.parse(text); } catch (e) { return null; }
+  }
+  function bodyWasDropped(data) {
+    return !!(data && data.ok === true && data.service === 'wedding-photos' && !data.id);
+  }
+  function postPayload(url, body, signal) {
+    return fetch(url, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: body,
+      signal: signal
+    });
+  }
   function callServer(payload) {
     return new Promise(function (resolve, reject) {
-      if (!(window.google && google.script && google.script.run)) { reject(new Error('Page is not running inside the web app.')); return; }
       var done = false;
-      var timer = setTimeout(function () { if (!done) { done = true; reject(new Error('timeout')); } }, CONFIG.timeoutMs);
-      google.script.run
-        .withSuccessHandler(function (r) { if (done) return; done = true; clearTimeout(timer); resolve(r); })
-        .withFailureHandler(function (e) { if (done) return; done = true; clearTimeout(timer); reject(e); })
-        .uploadPhoto(payload);
+      var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+      var timer = setTimeout(function () {
+        if (done) return;
+        done = true;
+        if (ctrl) ctrl.abort();
+        reject(new Error('timeout'));
+      }, CONFIG.timeoutMs);
+      var body = JSON.stringify(payload);
+      var signal = ctrl ? ctrl.signal : undefined;
+
+      function finish(err, value) {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        if (err) reject(err); else resolve(value);
+      }
+      function read(res) {
+        return res.text().then(function (text) {
+          var host = '';
+          try { host = new URL(res.url).host; } catch (e) {}
+          return { status: res.status, url: res.url, host: host, text: text };
+        });
+      }
+
+      postPayload(UPLOAD_URL, body, signal).then(read).then(function (first) {
+        var data = parseUploadBody(first.text);
+        if (bodyWasDropped(data) && first.host.indexOf('script.googleusercontent.com') !== -1) {
+          return postPayload(first.url, body, signal).then(read);
+        }
+        return first;
+      }).then(function (res) {
+        var data = parseUploadBody(res.text);
+        if (!res.status || res.status >= 400 || !data) { finish(new Error('http')); return; }
+        if (data.ok === true && data.id) { finish(null, data); return; }
+        if (data.ok === false && isValidationError(data.error)) {
+          finish(null, { ok: false, retry: false, message: data.error || 'This photo could not be saved.' });
+          return;
+        }
+        finish(new Error((data && data.error) || 'http'));
+      }).catch(function (err) { finish(err); });
     });
   }
 
@@ -528,9 +596,11 @@
     (it.b64 ? Promise.resolve(it.b64) : readBase64(it.blob)).then(function (b64) {
       it.b64 = b64;
       return callServer({
-        guest: guest, challengeId: it.st.ch.id,
-        submissionId: it.submissionId, uploadId: it.uploadId, index: it.index, count: it.count,
-        clientTime: it.clientTime, attempt: it.attempts, data: b64
+        guestName: String(guest || '').slice(0, CONFIG.maxNameLength),
+        challenge: it.st.ch.title,
+        filename: String(guest || '').slice(0, CONFIG.maxNameLength) + ' - ' + it.st.ch.title + ' - ' + fileStamp(it.clientTime) + '-' + it.index + '.jpg',
+        mimeType: 'image/jpeg',
+        imageBase64: b64
       });
     }).then(function (r) { res = r; }, function () { res = null; }).then(function () {
       active--;

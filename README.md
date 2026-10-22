@@ -16,9 +16,13 @@ Then go to [http://localhost:8080](http://localhost:8080).
 
 This is the same page as the live Apps Script app: layout, copy, challenge list, photo limits, resizing, upload retries, and offline behavior.
 
-Uploads use that app's `google.script.run.uploadPhoto` call, with the same payload, so photos still go to the same Apps Script when this page is running inside it. Google injects `google.script.run` only on that hosted web app. Opened on its own, this page still queues, retries, and shows the offline state; a completed save happens once that bridge is present.
+Uploads POST JSON to the Apps Script web app, which runs as the owner and saves each JPEG to Google Drive:
 
-There is no separate backend in this repo. The live script does not expose an HTTP `doPost` for uploads.
+https://script.google.com/macros/s/AKfycbwTRprbh_smqovnBd648Cp6KgEsUYv6O0dZmS8CZaHMrv8b11fWTh2Qj55dC-IfTgebSA/exec
+
+The body is `text/plain;charset=utf-8` so the browser does not send a CORS preflight, and the request uses `redirect: 'follow'`. Fields are `guestName` (trimmed, at most 40 characters), `challenge` (the challenge title), `filename` (`guest - challenge - YYYY-MM-DD HH-MM-SS-mmm-N.jpg`, with the photo number so a batch stays unique), `mimeType` (`image/jpeg`), and `imageBase64` (raw base64, without a `data:` prefix).
+
+A save returns `{ "ok": true, "id", "url" }`. A rejection returns `{ "ok": false, "error" }`. If a 302 drops the POST body, the same JSON is posted to that `script.googleusercontent.com` URL. Network and HTTP failures keep the 90 second timeout, 4 attempts, and backoff. The offline queue still waits until the browser is online. A clear validation error (empty, not an image, or over 5 MB) is not retried forever.
 
 ### Challenges, in order
 
