@@ -14,7 +14,7 @@ Then go to [http://localhost:8080](http://localhost:8080).
 
 ## What was matched
 
-This is the same page as the live Apps Script app: layout, copy, challenge list, photo limits, resizing, upload retries, and offline behavior.
+The guest flow matches the live Apps Script app: copy, challenge list, photo limits, resizing, upload retries, and offline behavior. The page is dressed for the wedding in butter yellow and blue, and it fits a phone or a wide browser.
 
 Uploads POST JSON to the Apps Script web app, which runs as the owner and saves each JPEG to Google Drive:
 
