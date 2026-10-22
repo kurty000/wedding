@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair&#43;Display:wght@500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+       
+      --cream: #fbf6ef;
+      --paper: #fffdf9;
+      --ink: #3a2e2e;
+      --muted: #766765;
+      --rose: #a5545f;
+      --rose-dark: #86404b;
+      --rose-soft: #f6e4e4;
+      --sage: #4f7a58;
+      --sage-soft: #e3efe5;
+      --gold: #b8924a;
+      --line: #eadfd3;
+      --error: #b3382c;
+      --error-soft: #fbe9e6;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      background-image: radial-gradient(circle at 50% -10%, #fff 0%, var(--cream) 60%);
+      color: var(--ink);
+      font: 18px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 20px 16px 48px;
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
+    h1, h2, .serif { font-family: "Playfair Display", Georgia, "Times New Roman", serif; font-weight: 600; }
+
+     
+    header { text-align: center; padding: 8px 0 20px; }
+    .rings { width: 56px; height: 36px; margin: 0 auto 6px; display: block; }
+    .eyebrow { margin: 0; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+    h1 { margin: 6px 0 4px; font-size: 32px; line-height: 1.18; }
+    .date { margin: 0; color: var(--muted); font-size: 16px; }
+    .divider { display: flex; align-items: center; gap: 10px; color: var(--gold); margin: 14px auto 0; max-width: 220px; }
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+     
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(120, 80, 60, .06);
+    }
+    .intro { margin: 0 0 16px; color: var(--muted); }
+    label.field { display: block; font-weight: 600; margin-bottom: 8px; }
+    input[type=text] {
+      width: 100%; font: inherit; font-size: 20px; padding: 14px 16px; min-height: 56px;
+      border: 2px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink);
+    }
+    input[type=text]:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 4px var(--rose-soft); }
+    .help { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+    .error-text { color: var(--error); font-weight: 600; margin: 10px 0 0; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 56px; padding: 12px 22px; border-radius: 999px; border: 2px solid transparent;
+      font: inherit; font-size: 18px; font-weight: 700; cursor: pointer; text-align: center;
+      touch-action: manipulation;
+    }
+    .btn-block { display: flex; width: 100%; }
+    .btn-primary { background: var(--rose); color: #fff; }
+    .btn-primary:active { background: var(--rose-dark); }
+    .btn-secondary { background: #fff; color: var(--rose-dark); border-color: var(--rose); }
+    .btn[disabled] { opacity: .5; cursor: not-allowed; }
+    .btn-link { background: none; border: 0; padding: 4px 0; font: inherit; font-size: 16px; color: var(--rose-dark); text-decoration: underline; cursor: pointer; }
+    .mt { margin-top: 16px; }
+
+     
+    .greeting { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    .greeting h2 { margin: 0; font-size: 24px; }
+    .progress-text { margin: 0 0 8px; font-weight: 600; }
+    .bar { height: 12px; border-radius: 999px; background: var(--line); overflow: hidden; }
+    .bar > span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--rose), var(--gold)); border-radius: 999px; transition: width .4s ease; }
+
+     
+    .challenge { margin-top: 14px; padding: 0; overflow: hidden; }
+    .ch-head {
+      width: 100%; display: flex; align-items: center; gap: 14px; text-align: left;
+      background: none; border: 0; padding: 16px 18px; font: inherit; color: inherit; cursor: pointer; min-height: 76px;
+      touch-action: manipulation;
+    }
+    .ch-icon { font-size: 30px; width: 44px; text-align: center; flex: none; }
+    .ch-text { flex: 1; min-width: 0; }
+    .ch-title { display: block; font-weight: 700; line-height: 1.25; }
+    .ch-hint { display: block; font-size: 15px; color: var(--muted); margin-top: 2px; }
+    .badge { flex: none; font-size: 14px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: var(--rose-soft); color: var(--rose-dark); white-space: nowrap; }
+    .badge.done { background: var(--sage-soft); color: var(--sage); }
+    .badge.busy { background: #fff4d6; color: #7a5a10; }
+    .challenge.is-done { border-color: #b9d4be; background: #f4faf5; }
+    .challenge.is-done .ch-icon { color: #fff; background: var(--sage); border-radius: 50%; width: 44px; height: 44px; line-height: 44px; font-size: 24px; font-weight: 700; }
+    .ch-panel { padding: 4px 18px 20px; border-top: 1px dashed var(--line); }
+    .ch-panel[hidden] { display: none; }
+    .actions { display: grid; gap: 12px; margin-top: 16px; }
+    .note { margin: 12px 0 0; font-size: 15px; color: var(--muted); }
+    .limit-msg { margin: 12px 0 0; padding: 12px 14px; border-radius: 12px; background: #fff4d6; color: #6b4e0c; font-weight: 600; }
+    .limit-msg[hidden] { display: none; }
+
+     
+    .tray { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+    .tray:empty { display: none; }
+    .thumb { position: relative; border-radius: 12px; overflow: hidden; background: var(--line); aspect-ratio: 1 / 1; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb .x {
+      position: absolute; top: 4px; right: 4px; width: 36px; height: 36px; border-radius: 50%;
+      border: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 22px; line-height: 1; cursor: pointer; touch-action: manipulation;
+    }
+    .thumb .state {
+      position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 6px 8px; font-size: 13px; font-weight: 700;
+      color: #fff; text-align: center; background: linear-gradient(transparent, rgba(0,0,0,.65));
+    }
+    .thumb.saved::after { content: "✓"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 44px; color: #fff; background: rgba(79,122,88,.55); }
+    .thumb.failed { outline: 3px solid var(--error); outline-offset: -3px; }
+    .thumb.failed .retry {
+      position: absolute; inset: auto 6px 6px 6px; min-height: 40px; border-radius: 10px; border: 0;
+      background: var(--error); color: #fff; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    .thumb .meter { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(255,255,255,.35); overflow: hidden; }
+    .thumb .meter::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; background: #fff; animation: slide 1.1s ease-in-out infinite; }
+    .thumb .state + .meter { bottom: 0; }
+    @keyframes slide { 0% { left: -40%; } 100% { left: 100%; } }
+    .spinner { position: absolute; top: 50%; left: 50%; width: 28px; height: 28px; margin: -14px 0 0 -14px; border: 4px solid #fff; border-top-color: var(--rose); border-radius: 50%; animation: spin .9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fail-line { grid-column: 1 / -1; margin: 0; color: var(--error); font-weight: 600; font-size: 15px; }
+    .upload-row { margin-top: 16px; }
+    .retry-all { margin-top: 10px; }
+
+     
+    .confirm { margin-top: 16px; padding: 16px; border-radius: 14px; background: var(--sage-soft); border: 1px solid #cfe0d2; }
+    .confirm[hidden] { display: none; }
+    .confirm.partial { background: var(--error-soft); border-color: #f0c9c3; }
+    .confirm h3 { margin: 0 0 6px; font-size: 20px; }
+    .confirm p { margin: 0 0 10px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+    .chips li { font-size: 14px; font-weight: 700; padding: 6px 10px; border-radius: 999px; background: #fff; color: var(--muted); border: 1px solid var(--line); }
+    .chips li.done { background: var(--sage); border-color: var(--sage); color: #fff; }
+
+     
+    .offline { position: sticky; top: 0; z-index: 5; margin: 0 0 12px; padding: 12px 14px; border-radius: 12px; background: #fff4d6; color: #6b4e0c; font-weight: 600; }
+    .offline[hidden] { display: none; }
+    footer { margin-top: 28px; text-align: center; font-size: 14px; color: var(--muted); }
+    [hidden] { display: none !important; }
+    @media (prefers-reduced-motion: reduce) { .spinner, .thumb .meter::after { animation: none; } .bar > span { transition: none; } }
+    @media (max-width: 360px) { h1 { font-size: 27px; } .tray { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="offline" class="offline" role="status" hidden>
+    No signal right now. Don’t worry, your photos are waiting and will send as soon as you’re back online.
+  </div>
+
+  <header>
+    <svg class="rings" viewBox="0 0 56 36" aria-hidden="true" fill="none" stroke="#b8924a" stroke-width="2.2">
+      <circle cx="20" cy="20" r="12"></circle><circle cx="36" cy="20" r="12"></circle>
+      <path d="M33 4l3 3-3 3-3-3z" fill="#b8924a" stroke="none"></path>
+    </svg>
+    <p class="eyebrow">Wedding Photo Challenge</p>
+    <h1 id="title"></h1>
+    <p class="date" id="dateLine"></p>
+    <div class="divider" aria-hidden="true">♥</div>
+  </header>
+
+  <noscript><div class="card">Please turn on JavaScript in your browser to share photos.</div></noscript>
+
+  
+  <section id="nameStep" class="card" aria-labelledby="nameLabel">
+    <p class="intro" id="intro"></p>
+    <label class="field" id="nameLabel" for="nameInput">Your name</label>
+    <input id="nameInput" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="go" maxlength="60" placeholder="e.g. Maria Santos">
+    <p class="help">So the couple knows who took each photo.</p>
+    <p id="nameError" class="error-text" role="alert" hidden>Please type your name to continue.</p>
+    <button id="nameGo" class="btn btn-primary btn-block mt" type="button">Let’s start</button>
+  </section>
+
+  
+  <section id="challengeStep" hidden>
+    <div class="greeting">
+      <h2 id="hello"></h2>
+      <button id="changeName" class="btn-link" type="button">Not you? Change name</button>
+    </div>
+    <div class="card">
+      <p class="progress-text" id="progressText"></p>
+      <div class="bar" aria-hidden="true"><span id="progressBar"></span></div>
+      <p class="note" style="margin-top:12px">Tap a challenge, take or choose your photos, then press Upload. You can do them in any order.</p>
+    </div>
+    <div id="list"></div>
+    <div id="allDone" class="confirm mt" role="status" hidden>
+      <h3>🎉 All challenges complete!</h3>
+      <p id="allDoneText"></p>
+    </div>
+  </section>
+
+  <footer>Your photos go privately to the couple. 💕</footer>
+</div>
+
+<script>
+  
+  var CONFIG = {"titlePrefix":"Share Your Moments with","coupleNames":"Kevin & Godley","dateLine":"May 15, 2027","introText":"Help us remember our day! Tell us your name, then pick a challenge, snap a photo and send it to us.","maxImages":10,"challenges":[{"id":"church","icon":"⛪","title":"Capture a moment at the Church","hint":"A photo during the wedding ceremony"},{"id":"venue","icon":"🥂","title":"Capture a moment at the Venue","hint":"A photo of the reception or venue"},{"id":"friends","icon":"👯","title":"Group Photo with Friends","hint":"A group picture with your friends"},{"id":"couple","icon":"💍","title":"Photo with the Bride and Groom","hint":"A photo with the newlyweds"},{"id":"candid","icon":"🎉","title":"Fun / Candid Moment","hint":"A fun or memorable candid moment from the wedding"}],"thankYou":"Thank you for celebrating with us! Your photos are saved safely and we can’t wait to see them. 💕","allDone":"You completed every challenge — you’re a star! Thank you for helping us capture our day. 🎉","maxNameLength":40,"maxDimension":1920,"jpegQuality":0.82,"targetBytes":1228800,"concurrency":2,"autoRetries":4,"timeoutMs":90000};
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var MAX = CONFIG.maxImages;
+  var CH = CONFIG.challenges;
+  var MAX_ORIGINAL_BYTES = 5 * 1024 * 1024; 
+
+   
+  function $(id) { return document.getElementById(id); }
+  function el(tag, props, kids) {
+    var n = document.createElement(tag);
+    if (props) {
+      for (var k in props) {
+        if (!Object.prototype.hasOwnProperty.call(props, k)) continue;
+        var v = props[k];
+        if (v === null || v === undefined) continue;
+        if (k === 'class') n.className = v;
+        else if (k === 'text') n.textContent = v;
+        else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v);
+        else n.setAttribute(k, v);
+      }
+    }
+    (kids || []).forEach(function (c) {
+      if (c === null || c === undefined) return;
+      n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+    return n;
+  }
+  function uid(len) {
+    var chars = 'abcdefghijklmnopqrstuvwxyz0123456789', out = '', arr = new Uint8Array(len), i;
+    if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
+    else for (i = 0; i < len; i++) arr[i] = Math.floor(Math.random() * 256);
+    for (i = 0; i < len; i++) out += chars.charAt(arr[i] % chars.length);
+    return out;
+  }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function store(key, val) {
+    try { if (val === undefined) return window.localStorage.getItem(key); window.localStorage.setItem(key, val); } catch (e) { return null; }
+    return null;
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+   
+  var guest = '';
+  var openId = null;
+  var subs = {};            
+  var queue = [];           
+  var active = 0;           
+  var prepChain = Promise.resolve();
+  var cards = {};           
+
+  CH.forEach(function (c) { cards[c.id] = { ch: c, items: [], saved: 0, dom: {}, confirm: null, limit: '' }; });
+
+   
+  
+  var t = $('title');
+  t.textContent = '';
+  t.appendChild(document.createTextNode(CONFIG.titlePrefix));
+  t.appendChild(document.createElement('br'));
+  t.appendChild(document.createTextNode(CONFIG.coupleNames.replace(/ /g, ' ')));
+  if (CONFIG.dateLine) $('dateLine').textContent = CONFIG.dateLine; else $('dateLine').hidden = true;
+  $('intro').textContent = CONFIG.introText;
+
+   
+  var saved = store('wpc_guest');
+  if (saved) $('nameInput').value = saved;
+
+  function startChallenge() {
+    var name = $('nameInput').value.replace(/\s+/g, ' ').trim().slice(0, CONFIG.maxNameLength);
+    if (!name) { $('nameError').hidden = false; $('nameInput').focus(); return; }
+    $('nameError').hidden = true;
+    guest = name;
+    store('wpc_guest', name);
+    $('hello').textContent = 'Hi, ' + name + '! 👋';
+    $('nameStep').hidden = true;
+    $('challengeStep').hidden = false;
+    window.scrollTo(0, 0);
+    updateProgress();
+  }
+  $('nameGo').addEventListener('click', startChallenge);
+  $('nameInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); startChallenge(); } });
+  $('changeName').addEventListener('click', function () {
+    var busy = Object.keys(cards).some(function (id) { return inFlight(cards[id]) > 0; });
+    if (busy && !window.confirm('Some photos are still sending. Change the name for NEW photos only?')) return;
+    $('challengeStep').hidden = true;
+    $('nameStep').hidden = false;
+    $('nameInput').focus();
+  });
+
+   
+  CH.forEach(function (c) {
+    var st = cards[c.id], d = st.dom;
+    var panelId = 'panel-' + c.id;
+
+    d.badge = el('span', { class: 'badge', text: 'Not yet' });
+    d.icon = el('span', { class: 'ch-icon', 'aria-hidden': 'true', text: c.icon || '📸' });
+    d.head = el('button', { class: 'ch-head', type: 'button', 'aria-expanded': 'false', 'aria-controls': panelId }, [
+      d.icon,
+      el('span', { class: 'ch-text' }, [
+        el('span', { class: 'ch-title', text: c.title }),
+        el('span', { class: 'ch-hint', text: c.hint || '' })
+      ]),
+      d.badge
+    ]);
+    d.head.addEventListener('click', function () { toggle(c.id); });
+
+    
+    d.camInput = el('input', { type: 'file', accept: 'image/*', capture: 'environment', hidden: '' });
+    d.galInput = el('input', { type: 'file', accept: 'image/*', multiple: '', hidden: '' });
+    d.camInput.addEventListener('change', function () { addFiles(c.id, d.camInput.files); d.camInput.value = ''; });
+    d.galInput.addEventListener('change', function () { addFiles(c.id, d.galInput.files); d.galInput.value = ''; });
+
+    d.camBtn = el('button', { class: 'btn btn-primary btn-block', type: 'button', text: '📷  Take a photo' });
+    d.galBtn = el('button', { class: 'btn btn-secondary btn-block', type: 'button', text: '🖼️  Choose from my gallery' });
+    d.camBtn.addEventListener('click', function () { d.camInput.click(); });
+    d.galBtn.addEventListener('click', function () { d.galInput.click(); });
+
+    d.limit = el('p', { class: 'limit-msg', role: 'status', 'aria-live': 'polite', hidden: '' });
+    d.tray = el('div', { class: 'tray' });
+    d.uploadBtn = el('button', { class: 'btn btn-primary btn-block', type: 'button', text: 'Upload' });
+    d.uploadBtn.addEventListener('click', function () { submit(c.id); });
+    d.retryAll = el('button', { class: 'btn btn-secondary btn-block retry-all', type: 'button', text: 'Retry failed photos', hidden: '' });
+    d.retryAll.addEventListener('click', function () { st.items.forEach(function (it) { if (it.status === 'failed') retryItem(it); }); });
+    d.confirm = el('div', { class: 'confirm', role: 'status', 'aria-live': 'polite', hidden: '' });
+
+    d.panel = el('div', { class: 'ch-panel', id: panelId, hidden: '' }, [
+      el('div', { class: 'actions' }, [d.camBtn, d.galBtn]),
+      el('p', { class: 'note', text: 'You can send up to ' + MAX + ' photos at a time, as many times as you like.' }),
+      d.limit,
+      d.tray,
+      el('div', { class: 'upload-row' }, [d.uploadBtn, d.retryAll]),
+      d.confirm,
+      d.camInput, d.galInput
+    ]);
+
+    d.root = el('article', { class: 'card challenge' }, [d.head, d.panel]);
+    $('list').appendChild(d.root);
+  });
+
+  function toggle(id) {
+    var willOpen = openId !== id;
+    openId = willOpen ? id : null;
+    CH.forEach(function (c) {
+      var d = cards[c.id].dom, isOpen = c.id === openId;
+      d.panel.hidden = !isOpen;
+      d.head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    if (willOpen) setTimeout(function () { cards[id].dom.root.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+  }
+
+   
+  function count(st, statuses) { return st.items.filter(function (it) { return statuses.indexOf(it.status) >= 0; }).length; }
+  function staged(st) { return count(st, ['preparing', 'ready']); }
+  function inFlight(st) { return count(st, ['queued', 'uploading', 'waiting']); }
+
+   
+  function addFiles(id, fileList) {
+    var st = cards[id];
+    var files = Array.prototype.slice.call(fileList || []).filter(function (f) {
+      return /^image\//i.test(f.type) || /\.(jpe?g|png|webp|heic|heif)$/i.test(f.name || '');
+    });
+    if (!files.length) return;
+    st.confirm = null;
+    var room = MAX - staged(st);
+    if (room <= 0) {
+      st.limit = 'That’s ' + MAX + ' photos, the most we can send at once. Press Upload first, then you can add more.';
+      render(id); return;
+    }
+    var take = files.slice(0, room);
+    st.limit = files.length > take.length
+      ? 'You can send up to ' + MAX + ' photos at a time, so we added the first ' + take.length + '. Press Upload, then add the rest!'
+      : (staged(st) + take.length >= MAX ? 'That’s the most we can send at once (' + MAX + '). Press Upload, then add more.' : '');
+    take.forEach(function (f) {
+      var it = { id: uid(8), st: st, status: 'preparing', file: f, blob: null, url: '', attempts: 0, note: '', err: '' };
+      st.items.push(it);
+      prepChain = prepChain.then(function () { return prepare(it); });
+    });
+    render(id);
+  }
+
+   
+  function loadImage(url) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { reject(new Error('decode')); };
+      img.src = url;
+    });
+  }
+  function canvasToBlob(canvas, q) {
+    return new Promise(function (resolve, reject) {
+      if (canvas.toBlob) {
+        canvas.toBlob(function (b) { b ? resolve(b) : reject(new Error('toBlob')); }, 'image/jpeg', q);
+      } else {
+        try {
+          var parts = canvas.toDataURL('image/jpeg', q).split(','), bin = atob(parts[1]), arr = new Uint8Array(bin.length);
+          for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          resolve(new Blob([arr], { type: 'image/jpeg' }));
+        } catch (e) { reject(e); }
+      }
+    });
+  }
+  function shrink(file) {
+    var src = URL.createObjectURL(file);
+    return loadImage(src).then(function (img) {
+      var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+      if (!w || !h) throw new Error('size');
+      var scale = Math.min(1, CONFIG.maxDimension / Math.max(w, h));
+      var cw = Math.max(1, Math.round(w * scale)), chh = Math.max(1, Math.round(h * scale));
+      var canvas = document.createElement('canvas');
+      canvas.width = cw; canvas.height = chh;
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cw, chh);
+      ctx.drawImage(img, 0, 0, cw, chh);       
+      var q = CONFIG.jpegQuality;
+      return canvasToBlob(canvas, q).then(function step(blob) {
+        if (blob.size > CONFIG.targetBytes && q > 0.5) {
+          q -= 0.1;
+          return canvasToBlob(canvas, q).then(step);
+        }
+        canvas.width = canvas.height = 1;      
+        return blob;
+      });
+    }).then(function (blob) { URL.revokeObjectURL(src); return blob; },
+            function (e) { URL.revokeObjectURL(src); throw e; });
+  }
+  function prepare(it) {
+    if (it.removed) return Promise.resolve();
+    return shrink(it.file).catch(function () {
+      
+      if (it.file.size <= MAX_ORIGINAL_BYTES && /jpe?g|png|webp|heic|heif/i.test((it.file.type || '') + (it.file.name || ''))) return it.file;
+      throw new Error('unreadable');
+    }).then(function (blob) {
+      if (it.removed) return;
+      it.blob = blob; it.url = URL.createObjectURL(blob); it.file = null; it.status = 'ready';
+      render(it.st.ch.id);
+    }, function () {
+      if (it.removed) return;
+      removeItem(it);
+      it.st.limit = 'Sorry, we couldn’t read one of those photos. Please try a different one.';
+      render(it.st.ch.id);
+    });
+  }
+
+  function removeItem(it) {
+    it.removed = true;
+    if (it.url) { try { URL.revokeObjectURL(it.url); } catch (e) {} }
+    it.st.items = it.st.items.filter(function (x) { return x !== it; });
+    queue = queue.filter(function (x) { return x !== it; });
+  }
+
+   
+  function submit(id) {
+    var st = cards[id];
+    var ready = st.items.filter(function (it) { return it.status === 'ready'; }).slice(0, MAX);
+    if (!ready.length || count(st, ['preparing'])) return;
+    st.confirm = null; st.limit = '';
+    var sid = 's' + uid(15);
+    subs[sid] = { reported: false };
+    var now = Date.now();
+    ready.forEach(function (it, i) {
+      it.submissionId = sid; it.index = i + 1; it.count = ready.length;
+      it.uploadId = sid + '-' + (i + 1); it.clientTime = now; it.attempts = 0;
+      enqueue(it);
+    });
+    render(id);
+  }
+  function enqueue(it) { it.status = 'queued'; it.note = ''; queue.push(it); pump(); }
+  function retryItem(it) {
+    it.attempts = 0; it.err = '';
+    if (subs[it.submissionId]) subs[it.submissionId].reported = false;
+    enqueue(it); render(it.st.ch.id);
+  }
+  function pump() {
+    while (active < CONFIG.concurrency && queue.length && navigator.onLine !== false) {
+      var it = queue.shift();
+      if (it.removed) continue;
+      active++;
+      run(it);
+    }
+  }
+
+  function readBase64(blob) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(String(r.result).split(',')[1] || ''); };
+      r.onerror = function () { reject(new Error('read')); };
+      r.readAsDataURL(blob);
+    });
+  }
+  function callServer(payload) {
+    return new Promise(function (resolve, reject) {
+      if (!(window.google && google.script && google.script.run)) { reject(new Error('Page is not running inside the web app.')); return; }
+      var done = false;
+      var timer = setTimeout(function () { if (!done) { done = true; reject(new Error('timeout')); } }, CONFIG.timeoutMs);
+      google.script.run
+        .withSuccessHandler(function (r) { if (done) return; done = true; clearTimeout(timer); resolve(r); })
+        .withFailureHandler(function (e) { if (done) return; done = true; clearTimeout(timer); reject(e); })
+        .uploadPhoto(payload);
+    });
+  }
+
+  function run(it) {
+    it.status = 'uploading'; it.note = '';
+    render(it.st.ch.id);
+    var res = null;
+    (it.b64 ? Promise.resolve(it.b64) : readBase64(it.blob)).then(function (b64) {
+      it.b64 = b64;
+      return callServer({
+        guest: guest, challengeId: it.st.ch.id,
+        submissionId: it.submissionId, uploadId: it.uploadId, index: it.index, count: it.count,
+        clientTime: it.clientTime, attempt: it.attempts, data: b64
+      });
+    }).then(function (r) { res = r; }, function () { res = null; }).then(function () {
+      active--;
+      if (it.removed) { pump(); return; }
+      if (res && res.ok) {
+        it.status = 'saved'; it.b64 = null; it.note = '';
+      } else if (res && res.ok === false && !res.retry) {
+        it.status = 'failed'; it.err = res.message || 'This photo could not be saved.'; it.b64 = null;
+      } else {
+        it.attempts++;
+        if (it.attempts < CONFIG.autoRetries) {
+          var delay = Math.min(30000, 2000 * Math.pow(2, it.attempts - 1)) + Math.floor(Math.random() * 1000);
+          it.status = 'waiting'; it.note = 'Weak signal. Trying again…';
+          setTimeout(function () { if (!it.removed && it.status === 'waiting') { it.status = 'queued'; queue.push(it); pump(); } }, delay);
+        } else {
+          it.status = 'failed'; it.err = 'Couldn’t send. Check your signal, then tap Retry.';
+        }
+      }
+      settled(it);
+      pump();
+    });
+  }
+
+   
+  function settled(it) {
+    var st = it.st, sub = subs[it.submissionId];
+    render(st.ch.id);
+    if (!sub || sub.reported) return;
+    var group = st.items.filter(function (x) { return x.submissionId === it.submissionId; });
+    if (group.some(function (x) { return x.status === 'queued' || x.status === 'uploading' || x.status === 'waiting'; })) return;
+    sub.reported = true;
+    var ok = group.filter(function (x) { return x.status === 'saved'; });
+    var bad = group.length - ok.length;
+    ok.forEach(removeItem);
+    st.saved += ok.length;
+    if (ok.length || bad) st.confirm = { ok: ok.length, bad: bad };
+    render(st.ch.id);
+    updateProgress();
+    if (ok.length) setTimeout(function () { st.dom.confirm.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 80);
+  }
+
+   
+  function doneCount() { return CH.filter(function (c) { return cards[c.id].saved > 0; }).length; }
+  function updateProgress() {
+    var n = doneCount(), total = CH.length;
+    $('progressText').textContent = n + ' of ' + total + ' challenges done';
+    $('progressBar').style.width = Math.round((n / total) * 100) + '%';
+    var all = n === total;
+    $('allDone').hidden = !all;
+    if (all) $('allDoneText').textContent = CONFIG.allDone;
+  }
+
+  function render(id) {
+    var st = cards[id], d = st.dom;
+    var flying = inFlight(st), failed = count(st, ['failed']), ready = count(st, ['ready']), prep = count(st, ['preparing']);
+
+    
+    d.badge.className = 'badge' + (flying ? ' busy' : (st.saved ? ' done' : ''));
+    d.badge.textContent = flying ? 'Sending…' : (st.saved ? '✓ Completed (' + st.saved + ')' : 'Not yet');
+    d.root.className = 'card challenge' + (st.saved ? ' is-done' : '');
+    
+    d.icon.textContent = st.saved ? '✓' : (st.ch.icon || '📸');
+
+    
+    var full = staged(st) >= MAX;
+    d.camBtn.disabled = d.galBtn.disabled = flying > 0 || full;
+    d.camBtn.textContent = flying ? '⏳  Sending your photos…' : (st.saved || st.items.length ? '📷  Take another photo' : '📷  Take a photo');
+
+    
+    d.limit.hidden = !st.limit; d.limit.textContent = st.limit;
+
+    
+    while (d.tray.firstChild) d.tray.removeChild(d.tray.firstChild);
+    st.items.forEach(function (it) { d.tray.appendChild(thumb(it)); });
+    var errs = st.items.filter(function (it) { return it.status === 'failed' && it.err; });
+    if (errs.length) d.tray.appendChild(el('p', { class: 'fail-line', text: errs[0].err }));
+
+    
+    d.uploadBtn.hidden = !(ready || prep);
+    d.uploadBtn.disabled = !!prep || !ready || flying > 0;
+    d.uploadBtn.textContent = prep ? 'Getting your photos ready…' : 'Upload ' + plural(ready, 'photo', 'photos');
+    d.retryAll.hidden = failed < 2;
+
+    
+    if (st.confirm) {
+      var c = st.confirm, partial = c.bad > 0;
+      d.confirm.className = 'confirm' + (partial ? ' partial' : '');
+      while (d.confirm.firstChild) d.confirm.removeChild(d.confirm.firstChild);
+      d.confirm.appendChild(el('h3', { text: partial ? (c.ok ? 'Almost there!' : 'Not sent yet') : 'Saved! Thank you, ' + guest + ' 🎉' }));
+      d.confirm.appendChild(el('p', { text: partial
+        ? (c.ok ? plural(c.ok, 'photo is', 'photos are') + ' saved. ' : '') + plural(c.bad, 'photo needs', 'photos need') + ' another try. Tap Retry on the red photo.'
+        : plural(c.ok, 'photo', 'photos') + ' saved for “' + st.ch.title + '”. ' + CONFIG.thankYou }));
+      var chips = el('ul', { class: 'chips', 'aria-label': 'Your challenges' });
+      CH.forEach(function (x) { chips.appendChild(el('li', { class: cards[x.id].saved ? 'done' : '', text: (cards[x.id].saved ? '✓ ' : '○ ') + x.title })); });
+      d.confirm.appendChild(chips);
+      d.confirm.appendChild(el('p', { class: 'note', text: 'Want to share more? Take another photo above, or open another challenge.' }));
+      d.confirm.hidden = false;
+    } else {
+      d.confirm.hidden = true;
+    }
+  }
+
+  function thumb(it) {
+    var t = el('div', { class: 'thumb ' + it.status });
+    if (it.url) t.appendChild(el('img', { src: it.url, alt: 'Your photo' }));
+    if (it.status === 'preparing') {
+      t.appendChild(el('div', { class: 'spinner', role: 'img', 'aria-label': 'Getting photo ready' }));
+    }
+    if (it.status === 'ready' || it.status === 'failed') {
+      t.appendChild(el('button', { class: 'x', type: 'button', 'aria-label': 'Remove this photo', text: '×',
+        onclick: function () { var id = it.st.ch.id; removeItem(it); it.st.limit = ''; render(id); } }));
+    }
+    if (it.status === 'queued') t.appendChild(el('div', { class: 'state', text: 'Waiting…' }));
+    if (it.status === 'waiting') t.appendChild(el('div', { class: 'state', text: 'Retrying…' }));
+    if (it.status === 'uploading') {
+      t.appendChild(el('div', { class: 'state', text: 'Sending…' }));
+      t.appendChild(el('div', { class: 'meter' }));
+    }
+    if (it.status === 'failed') {
+      t.appendChild(el('button', { class: 'retry', type: 'button', text: 'Retry', onclick: function () { retryItem(it); } }));
+    }
+    return t;
+  }
+
+   
+  function showOffline() { $('offline').hidden = navigator.onLine !== false; }
+  window.addEventListener('offline', showOffline);
+  window.addEventListener('online', function () { showOffline(); pump(); });
+  showOffline();
+
+  window.addEventListener('beforeunload', function (e) {
+    var pending = Object.keys(cards).some(function (id) { return inFlight(cards[id]) > 0; });
+    if (pending) { e.preventDefault(); e.returnValue = ''; return ''; }
+  });
+
+  CH.forEach(function (c) { render(c.id); });
+  updateProgress();
+})();
+</script>
+</body>
+</html>
