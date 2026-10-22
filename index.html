@@ -5,6 +5,7 @@
   <base target="_top">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f8e7a1'/%3E%3Ccircle cx='24' cy='34' r='12' fill='none' stroke='%232f6fae' stroke-width='3'/%3E%3Ccircle cx='40' cy='34' r='12' fill='none' stroke='%232f6fae' stroke-width='3'/%3E%3Cpath d='M36 14l4 4-4 4-4-4z' fill='%23e3b23c'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet">
   <style>
@@ -106,7 +107,35 @@
       background: none; border: 0; padding: 16px 18px; font: inherit; color: inherit; cursor: pointer; min-height: 76px;
       touch-action: manipulation;
     }
-    .ch-icon { font-size: 30px; width: 44px; text-align: center; flex: none; }
+    .ch-icon {
+      width: 44px; height: 44px; border-radius: 50%; flex: none;
+      background: #f8efc4; color: var(--rose-dark);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; line-height: 1;
+    }
+    .ch-icon::before {
+      content: ""; width: 22px; height: 22px; background: currentColor;
+      -webkit-mask: var(--mark) center / contain no-repeat;
+      mask: var(--mark) center / contain no-repeat;
+    }
+    .icon-church { --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M11 1h2v3h3v2h-3v2h5l3 4h-3v9H6v-9H3l3-4h5V6H8V4h3V1zm0 13h2v6h-2z'/%3E%3C/svg%3E"); }
+    .icon-venue { --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M7 2h3l-.6 7.2A3.2 3.2 0 1 1 4.6 9.2L5.2 2H7zm7 0h1.8l.6 7.2a3.2 3.2 0 1 1-4.8 0L13.2 2H14zM11 15h2v4h-2zm-7 6h16v2H4z'/%3E%3C/svg%3E"); }
+    .icon-friends { --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M6 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm12 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM12 7.2a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8zM2.5 18v-1.2C2.5 14.2 4.4 13 6.5 13s4 1.2 4 3.8V18h-8zm9 0v-1.4c0-2.1 1.6-3.4 3.5-3.4s3.5 1.3 3.5 3.4V18h-7zm6.5 0v-1.2c0-1.2.4-2.2 1.1-3 .9-.4 1.9-.6 2.9-.6 1.8 0 3 1 3 2.8V18h-7z'/%3E%3C/svg%3E"); }
+    .icon-couple { --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' fill-rule='evenodd' d='M7.2 4.8a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2.1a2.9 2.9 0 1 1 0 5.8 2.9 2.9 0 0 1 0-5.8zM15.2 8.2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2.1a2.9 2.9 0 1 1 0 5.8 2.9 2.9 0 0 1 0-5.8z'/%3E%3C/svg%3E"); }
+    .icon-candid { --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M9 4h6l1.2 2H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2.8L9 4zm3 4.2a4.3 4.3 0 1 0 .1 8.6 4.3 4.3 0 0 0-.1-8.6zM12 10a2.3 2.3 0 1 1 0 4.6A2.3 2.3 0 0 1 12 10z'/%3E%3C/svg%3E"); }
+    .ch-icon.is-check::before { display: none; }
+    .btn-cam::before, .btn-gal::before {
+      content: ""; width: 22px; height: 22px; flex: none; background: currentColor;
+      -webkit-mask: var(--mark) center / contain no-repeat;
+      mask: var(--mark) center / contain no-repeat;
+    }
+    .btn-cam { --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M9 4h6l1.2 2H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2.8L9 4zm3 4.2a4.3 4.3 0 1 0 .1 8.6 4.3 4.3 0 0 0-.1-8.6zM12 10a2.3 2.3 0 1 1 0 4.6A2.3 2.3 0 0 1 12 10z'/%3E%3C/svg%3E"); }
+    .btn-gal { --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2v7.2l3.2-3.2 2.3 2.3 3.2-3.6L18 14.2V7H5zm0 10h14v-1.2l-4.6-4.2-3.1 3.5-2.3-2.3L5 16.2V17zM8.2 10.2a1.4 1.4 0 1 0 0-2.8 1.4 1.4 0 0 0 0 2.8z'/%3E%3C/svg%3E"); }
+    .btn-cam.is-busy::before { display: none; }
+    .moments { display: grid; grid-template-columns: 1.4fr 1fr 1fr; grid-auto-rows: 150px; gap: 8px; margin: 4px 0 18px; }
+    .shot { width: 100%; height: 100%; object-fit: cover; border-radius: 18px; border: 3px solid #fff; box-shadow: 0 8px 18px rgba(29, 79, 134, .14); }
+    .shot-main { grid-row: span 2; }
+    .moments-note { margin: -6px 0 16px; text-align: center; color: var(--muted); font-size: 14px; }
     .ch-text { flex: 1; min-width: 0; }
     .ch-title { display: block; font-weight: 700; line-height: 1.25; }
     .ch-hint { display: block; font-size: 15px; color: var(--muted); margin-top: 2px; }
@@ -114,7 +143,7 @@
     .badge.done { background: var(--sage-soft); color: var(--sage); }
     .badge.busy { background: #fff4d6; color: #7a5a10; }
     .challenge.is-done { border-color: #b7d0ea; background: #f3f8fd; }
-    .challenge.is-done .ch-icon { color: #fff; background: var(--sage); border-radius: 50%; width: 44px; height: 44px; line-height: 44px; font-size: 24px; font-weight: 700; }
+    .challenge.is-done .ch-icon { color: #fff; background: var(--sage); }
     .ch-panel { padding: 4px 18px 20px; border-top: 1px dashed var(--line); }
     .ch-panel[hidden] { display: none; }
     .actions { display: grid; gap: 12px; margin-top: 16px; }
@@ -182,6 +211,15 @@
       .script { font-size: 56px; }
       .actions { grid-template-columns: 1fr 1fr; }
       .greeting h2 { font-size: 32px; }
+      .moments { grid-auto-rows: 168px; }
+    }
+    @media (max-width: 700px) {
+      .moments {
+        display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory;
+        margin-left: -16px; margin-right: -16px; padding: 0 16px 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .shot, .shot-main { flex: 0 0 78%; width: 78%; height: 230px; scroll-snap-align: center; }
     }
   </style>
 </head>
@@ -201,8 +239,17 @@
     <p class="eyebrow">Wedding Photo Challenge</p>
     <h1 id="title"></h1>
     <p class="date" id="dateLine"></p>
-    <div class="divider" aria-hidden="true">♥</div>
+    <div class="divider" aria-hidden="true">✦</div>
   </header>
+
+  <section class="moments" aria-label="Photos of the couple">
+    <img class="shot shot-main" src="photos/lift.jpg" alt="The couple, one lifting the other, in front of the Eiffel Tower">
+    <img class="shot" src="photos/tower.jpg" alt="The couple waving in front of the Eiffel Tower">
+    <img class="shot" src="photos/temple.jpg" alt="The couple standing among large bronze statues">
+    <img class="shot" src="photos/dusk.jpg" alt="A portrait on a balcony above the city at dusk">
+    <img class="shot" src="photos/night.jpg" alt="A portrait on a balcony above the city at night">
+  </section>
+  <p class="moments-note">A few of our favorite days</p>
 
   <noscript><div class="card">Please turn on JavaScript in your browser to share photos.</div></noscript>
 
@@ -337,7 +384,7 @@
     var panelId = 'panel-' + c.id;
 
     d.badge = el('span', { class: 'badge', text: 'Not yet' });
-    d.icon = el('span', { class: 'ch-icon', 'aria-hidden': 'true', text: c.icon || '📸' });
+    d.icon = el('span', { class: 'ch-icon icon-' + c.id, 'aria-hidden': 'true' });
     d.head = el('button', { class: 'ch-head', type: 'button', 'aria-expanded': 'false', 'aria-controls': panelId }, [
       d.icon,
       el('span', { class: 'ch-text' }, [
@@ -354,8 +401,8 @@
     d.camInput.addEventListener('change', function () { addFiles(c.id, d.camInput.files); d.camInput.value = ''; });
     d.galInput.addEventListener('change', function () { addFiles(c.id, d.galInput.files); d.galInput.value = ''; });
 
-    d.camBtn = el('button', { class: 'btn btn-primary btn-block', type: 'button', text: '📷  Take a photo' });
-    d.galBtn = el('button', { class: 'btn btn-secondary btn-block', type: 'button', text: '🖼️  Choose from my gallery' });
+    d.camBtn = el('button', { class: 'btn btn-primary btn-block btn-cam', type: 'button', text: 'Take a photo' });
+    d.galBtn = el('button', { class: 'btn btn-secondary btn-block btn-gal', type: 'button', text: 'Choose from my gallery' });
     d.camBtn.addEventListener('click', function () { d.camInput.click(); });
     d.galBtn.addEventListener('click', function () { d.galInput.click(); });
 
@@ -685,12 +732,14 @@
     d.badge.textContent = flying ? 'Sending…' : (st.saved ? '✓ Completed (' + st.saved + ')' : 'Not yet');
     d.root.className = 'card challenge' + (st.saved ? ' is-done' : '');
     
-    d.icon.textContent = st.saved ? '✓' : (st.ch.icon || '📸');
+    d.icon.className = 'ch-icon ' + (st.saved ? 'is-check' : 'icon-' + st.ch.id);
+    d.icon.textContent = st.saved ? '✓' : '';
 
     
     var full = staged(st) >= MAX;
     d.camBtn.disabled = d.galBtn.disabled = flying > 0 || full;
-    d.camBtn.textContent = flying ? '⏳  Sending your photos…' : (st.saved || st.items.length ? '📷  Take another photo' : '📷  Take a photo');
+    d.camBtn.classList.toggle('is-busy', flying > 0);
+    d.camBtn.textContent = flying ? 'Sending your photos…' : (st.saved || st.items.length ? 'Take another photo' : 'Take a photo');
 
     
     d.limit.hidden = !st.limit; d.limit.textContent = st.limit;
